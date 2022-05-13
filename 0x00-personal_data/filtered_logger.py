@@ -7,7 +7,7 @@ from mysql.connector import connection
 from os import environ
 
 
-PII_FIELDS = ('name', 'email', 'password', 'snn', 'phone')
+PII_FIELDS = ('name', 'email', 'ssn', 'password', 'phone')
 
 
 def filter_datum(fields: List[str], redaction: str,
@@ -51,15 +51,20 @@ def main() -> None:
     cursor = db_info.cursor()
     cursor.execute("SELECT * FROM users;")
     fetched = cursor.fetchall()
+    """get all records"""
+
     logger = get_logger()
-    for r in fetched:
-        fields = 'name={}; email={}; phone={}; ssn={}; password={}; ip={}; last_login={}; user_agent={};'
-        fields = fields.format(r[0],r[1], r[2], r[3], r[4],r[5], r[6], r[7])
+    print("the number of row in table:", cursor.rowcount)
+    for row in fetched:
+        fields = 'name={}; email={}; phone={}; ssn={}; password={}; ip={}; '\
+            'last_login={}; user_agent={};'
+        fields = fields.format(row[0], row[1], row[2], row[3], row[4],
+                               row[5], row[6], row[7])
+
         logger.info(fields)
-        
+
     cursor.close()
     db_info.close()
-    
 
 
 class RedactingFormatter(logging.Formatter):
@@ -79,6 +84,7 @@ class RedactingFormatter(logging.Formatter):
         return filter_datum(self.fields, self.REDACTION,
                             super(RedactingFormatter, self).format(record),
                             self.SEPARATOR)
+
 
 if __name__ == "__main__":
     """when name is main"""
