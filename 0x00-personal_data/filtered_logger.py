@@ -41,7 +41,7 @@ def get_db() -> connection.MySQLConnection:
         user=dbUser,
         password=dbPassword,
         host=dbHost,
-        name=dbName)
+        database=dbName)
     return connect
 
 
