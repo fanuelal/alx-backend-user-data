@@ -38,11 +38,12 @@ def get_db() -> connection.MySQLConnection:
     dbHost = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
     dbName = environ.get("PERSONAL_DATA_DB_NAME")
     connect = connection.MySQLConnection(
-        user = dbUser,
-        password = dbPassword,
-        host = dbHost,
-        name = dbName)
+        user=dbUser,
+        password=dbPassword,
+        host=dbHost,
+        name=dbName)
     return connect
+
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
