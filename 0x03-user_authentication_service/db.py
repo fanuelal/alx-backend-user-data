@@ -11,10 +11,10 @@ from user import Base, User
 
 
 class DB:
-    """ DB class """
+    """DB class"""
 
     def __init__(self):
-        """ Instance """
+        """Instance"""
 
         self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
@@ -23,7 +23,7 @@ class DB:
 
     @property
     def _session(self):
-        """ Sets up session """
+        """Sets up session"""
 
         if self.__session is None:
             DBSession = sessionmaker(bind=self._engine)
@@ -31,7 +31,7 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """ create user on db """
+        """create user on db"""
 
         addUser = User(email=email, hashed_password=hashed_password)
         self._session.add(addUser)
@@ -39,16 +39,15 @@ class DB:
         return addUser
 
     def find_user_by(self, **kwargs) -> User:
-        """ returns the first row found in the users table """
+        """returns the first row found in the users table"""
         if not kwargs:
             raise InvalidRequestError
 
-        cols = ['id', 'email', 'hashed_password', 'session_id', 'reset_token']
+        cols = ["id", "email", "hashed_password", "session_id", "reset_token"]
 
         for arg in kwargs:
             if arg not in cols:
                 raise InvalidRequestError
-
 
         found = self._session.query(User).filter_by(**kwargs).first()
 
@@ -58,11 +57,11 @@ class DB:
             raise NoResultFound
 
     def update_user(self, user_id: int, **kwargs) -> None:
-        """ Finds user record and updates attributes """
+        """Finds user record and updates attributes"""
 
         user_to_update = self.find_user_by(id=user_id)
 
-        cols = ['id', 'email', 'hashed_password', 'session_id', 'reset_token']
+        cols = ["id", "email", "hashed_password", "session_id", "reset_token"]
         for k, v in kwargs.items():
             if k in cols:
                 setattr(user_to_update, k, v)
