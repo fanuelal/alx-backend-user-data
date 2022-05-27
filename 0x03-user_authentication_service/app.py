@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Module flask"""
 from flask import Flask, jsonify, request, abort, redirect, url_for
+from sqlalchemy.orm.exc import NoResultFound
 
 
 app = Flask(__name__)
 AUTH = auth()
 
 
-@app.route("/", methods=["GET"], strict_slashes=False)
+@app.route('/', methods=['GET'], strict_slashes=False)
 def index() -> str:
     """json payload of the from"""
     jsn = jsonify({"message": "Bienvenue"})
